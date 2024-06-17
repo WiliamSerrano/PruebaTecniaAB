@@ -1,0 +1,6 @@
+
+Usuario                         Contra
+
+William                         12345         Administrador
+Maria                           12345	      Accountant
+Pablo                           12345         Seller
