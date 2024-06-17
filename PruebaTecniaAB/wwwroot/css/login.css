@@ -1,0 +1,12 @@
+﻿.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.log {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+}

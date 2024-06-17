@@ -1,0 +1,73 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+.btnAdd {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: green;
+    border: none;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    justify-content: center;
+}
+
+.btnLess {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: red;
+    border: none;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    justify-content: center;
+}
+
+.maincontainer {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.cont {
+
+    display: block;
+
+}
+
+.contSales {
+
+    height: 200px;
+    max-width: 100%;
+    overflow-y: auto;
+    position: relative;
+
+}
+
+#salelist > thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+}
+
+
+#salelist > tbody {
+    border-top: none;
+}
+
+#total {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+   
+
+

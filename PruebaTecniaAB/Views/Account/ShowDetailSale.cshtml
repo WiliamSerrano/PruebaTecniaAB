@@ -1,0 +1,85 @@
+﻿@model PruebaTecniaAB.Models.ViewModels.SaleDetailVM;
+@{
+    ViewData["Title"] = "ShowDetailSale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div class="row">
+    <div class="col col-sm-4">
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.NameClient">Client</label>
+            <input class="form-control form-control-sm" asp-for="oSale.NameClient" type="text" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.Description">Description</label>
+            <input class="form-control form-control-sm" asp-for="oSale.Description" type="text" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.Mail">Mail</label>
+            <input class="form-control form-control-sm" asp-for="oSale.Mail" type="email" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.TotalPrice">Total Price</label>
+            <input class="form-control form-control-sm" asp-for="oSale.TotalPrice" type="number" step="0.01" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.CreationDate">Creation Date</label>
+            <input class="form-control form-control-sm" asp-for="oSale.CreationDate" type="datetime" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.PaidDate">Total Price</label>
+            <input class="form-control form-control-sm" asp-for="oSale.PaidDate" type="datetime" disabled />
+
+        </div>
+
+        <div class="mb-2">
+
+            <label class="form-label" asp-for="oSale.IsPaid">Paid</label>
+            <input type="checkbox" class="form-check-input" asp-for="oSale.IsPaid" />
+
+        </div>
+
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.oProducts)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(p => item.ProductName)</td>
+                            <td>@(item.UnitPrice * item.Quantity) $</td>
+                            <td>@Html.DisplayFor(q => item.Quantity)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a class="btn btn-dark btn-sm" asp-action="Index" asp-controller="Account">Return</a>
+        </div>
+
+     </div>
+</div>

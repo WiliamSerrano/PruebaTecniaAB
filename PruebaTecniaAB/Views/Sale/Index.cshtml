@@ -1,0 +1,77 @@
+﻿@* @model PruebaTecniaAB.Models.Sale; *@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/sale.css" asp-append-version="true" />
+
+
+<div class="container-fluid col-lg-12 maincontainer">
+
+    <div class="col-6 cont">
+        <h3>Products</h3>
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tableProduct">
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+  
+    <div class="row col-6 cont">
+        <h3>Sales list</h3>
+        <div class="contSales">
+            <div>
+                <table id="salelist" class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="saleBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form>
+            <div>
+                <div class="mb-3">
+                    <label class="form-label">Total cost</label>
+                    <input id="total" name="total" class="form-control" type="text" value="0" disabled readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Name Client</label>
+                    <input id="name" name="name" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input id="description" name="description"  type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mail</label>
+                    <input id="mail" name="mail"  type="mail" class="form-control">
+                </div>
+                <div>
+                    <button class="btn btn-success btn-sm" id="btnSel" onclick="SetData()" type="button">Sell</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/sale.js" asp-append-version="true"></script>
+

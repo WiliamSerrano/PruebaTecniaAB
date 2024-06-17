@@ -1,0 +1,53 @@
+﻿@model PruebaTecniaAB.Models.User;
+@{
+    ViewData["Title"] = "Eliminar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text text-danger">Are you sure to delete this user?</h1>
+
+<div class="row">
+    <div class="col col-sm-4">
+        <form asp-action="Eliminar" asp-controller="User" method="post">
+
+            <input type="hidden" asp-for="IdUser" />
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="FirstName">First Name</label>
+                <input class="form-control form-control-sm" asp-for="FirstName" type="text" disabled />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="LastName">Last Name</label>
+                <input class="form-control form-control-sm" asp-for="LastName" type="email" disabled />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="Mail">Mail</label>
+                <input class="form-control form-control-sm" asp-for="Mail" type="text" disabled />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="Role">Role</label>
+                <input class="form-control form-control-sm" asp-for="Role" type="text" disabled />
+
+            </div>
+
+            <div class="mb-2">
+
+                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                <a class="btn btn-dark btn-sm" asp-action="Index" asp-controller="User">Cancel</a>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+

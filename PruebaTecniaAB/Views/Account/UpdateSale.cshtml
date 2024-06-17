@@ -1,0 +1,65 @@
+﻿@model PruebaTecniaAB.Models.Sale;
+@{
+    ViewData["Title"] = "UpdateSale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Vista de pagar</h1>
+
+<div class="row">
+    <div class="col col-sm-4">
+        <form asp-action="UpdateSale" asp-controller="Account" method="post">
+
+            <input type="hidden" asp-for="IdSale" />
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="NameClient">Client</label>
+                <input class="form-control form-control-sm" asp-for="NameClient" type="text" />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="Description">Description</label>
+                <input class="form-control form-control-sm" asp-for="Description" type="text" />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="Mail">Mail</label>
+                <input class="form-control form-control-sm" asp-for="Mail" type="email" />
+
+            </div>
+
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="TotalPrice">Total Price</label>
+                <input type="number" class="form-control form-control-sm" asp-for="TotalPrice" />
+
+            </div>
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="CreationDate">Creation Date</label>
+                <input type="datetime" class="form-control form-control-sm" asp-for="CreationDate" />
+
+            </div>
+            <div class="mb-2">
+
+                <label class="form-label" asp-for="PaidDate">Paid Date</label>
+                <input type="datetime" class="form-control form-control-sm" asp-for="PaidDate" />
+
+            </div>
+          
+            <div class="mb-2">
+
+                <button class="btn btn-primary btn-sm" type="submit">Paid</button>
+
+                <a class="btn btn-dark btn-sm" asp-action="Index" asp-controller="Account">Cancel</a>
+
+            </div>
+
+        </form>
+    </div>
