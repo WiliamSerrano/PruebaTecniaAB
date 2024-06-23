@@ -5,23 +5,26 @@ using Microsoft.AspNetCore.Mvc;
 using PruebaTecniaAB.Models;
 using System.Diagnostics;
 using System.Security.Claims;
+using PruebaTecniaAB.Data.Interfaces;
 
 namespace PruebaTecniaAB.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHomeRepository _homeRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHomeRepository homeRepository)
         {
-            _logger = logger;
+
+            _homeRepository = homeRepository;
+
         }
 
         [Authorize(policy: "AllRoles")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int quantity = 5)
         {
-
-            return View();
+            var lowProduct = await _homeRepository.GetLowStocProduct(quantity);
+            return View(lowProduct);
         }
 
 
