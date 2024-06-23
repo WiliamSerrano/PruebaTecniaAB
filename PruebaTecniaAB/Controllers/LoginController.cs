@@ -57,7 +57,7 @@ namespace PruebaTecniaAB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             return RedirectToAction("Index", "Login");
         }

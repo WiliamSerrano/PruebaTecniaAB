@@ -1,11 +1,28 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PruebaTecniaAB.Data.Interfaces;
+using PruebaTecniaAB.Data.Repositories;
 using PruebaTecniaAB.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Dependencies 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options => {
+    options.Filters.Add(
+            new ResponseCacheAttribute {
+        
+                    NoStore = true,
+        
+            }
+        );
+});
 
 builder.Services.AddDbContext<DBVENTASContext>(options =>
 
@@ -18,7 +35,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/Home/Index";
-        options.LogoutPath = "/Login/Index";
     });
 
 builder.Services.AddAuthorization(options =>

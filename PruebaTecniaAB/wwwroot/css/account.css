@@ -1,0 +1,13 @@
+﻿.nav-item {
+    background-color: #1A6E73;
+    font-weight: bold;
+}
+
+thead {
+    color: white;
+    background-color: #1A6E73;
+}
+
+tbody {
+    background-color: white;
+}

@@ -1,4 +1,31 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    background-color: #1A6E73;
+    color: white;
+    text-align: center
+}
+
+.cardUser {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.cardProduct {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.container {
+    margin-top: 100px;
+}
+
 html {
+  width: 100vw;  
+  height: 100%;
   font-size: 14px;
 }
 
@@ -8,11 +35,14 @@ html {
   }
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+header {
+    width: 100vw;
+    height: 100px;
+    z-index: 2;
+    position: fixed;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 20px;
+    background-color: #DADDDF;
 }

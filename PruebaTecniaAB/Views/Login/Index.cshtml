@@ -14,40 +14,26 @@
     <title>Index</title>
 </head>
 <body>
-    @* <div class="maincont">
-        <div class="col-12">
-            <div class="col-sm-4">
-                <form asp-action="Login" method="post">
-                    <div class="form-group">
-                        <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" required />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Clave" class="control-label"></label>
-                        <input asp-for="Clave" type="password" class="form-control" required />
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> *@
-
     <div class="login">
         <div class="login-form log bg-light">
-            <h3 class="text-center mb-4">Iniciar Sesión</h3>
-            <form asp-action="Login" method="post">
-                <div class="mb-3">
-                    <label asp-for="FirstName" class="form-label">User</label>
-                    <input class="form-control" asp-for="FirstName" required>
+            <div class="headLogin">
+                <div class="headcap">
+                    <h3 class="text-center mb-4">Sign In</h3>
                 </div>
-                <div class="mb-3">
-                    <label for="password" asp-for="Clave" class="form-label">Password</label>
-                    <input type="password" asp-for="Clave" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
+            </div>
+            <div class="bodyLogin">
+                <form asp-action="Login" method="post">
+                    <div class="mb-3">
+                        <label asp-for="FirstName" class="form-label">User</label>
+                        <input class="form-control" asp-for="FirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" asp-for="Clave" class="form-label">Password</label>
+                        <input type="password" asp-for="Clave" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            </div>
         </div>
     </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

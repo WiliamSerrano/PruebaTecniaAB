@@ -1,8 +1,41 @@
-﻿@{
+﻿@model List<Product>;
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">
+        Welcome @if (User.Identity.IsAuthenticated)
+        {
+                <h4>@User.Identity.Name!</h4>
+
+        }
+    </h1>
 </div>
+<@* div class="card">
+    <div class="card-header">
+        <h5>
+            Products with low stock
+        </h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+               @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.ProductName</td>
+                        <td>@product.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> *@
+<script src="~/js/logout.js" asp-append-version="true"></script>

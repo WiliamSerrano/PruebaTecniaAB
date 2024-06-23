@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using PruebaTecniaAB.Data.Interfaces;
+using PruebaTecniaAB.Data.Repositories;
 using PruebaTecniaAB.Models;
 
 namespace PruebaTecniaAB.Controllers
@@ -8,12 +10,12 @@ namespace PruebaTecniaAB.Controllers
     public class ProductController : Controller
     {
 
-        private readonly DBVENTASContext _dbVentasContext;
+        private readonly IProductRepository _productRepository;
 
-        public ProductController(DBVENTASContext context)
+        public ProductController(IProductRepository productRepository)
         {
 
-            _dbVentasContext = context;
+            _productRepository = productRepository;
 
         }
 
@@ -21,13 +23,12 @@ namespace PruebaTecniaAB.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<Product> productList =  await _dbVentasContext.Products.ToListAsync();
-
-            return View(productList);
+            var products = await _productRepository.GetProducts();
+            return View(products);
         }
 
         [HttpGet]
-        public IActionResult Product_Detail(int idProduct)
+        public async Task<IActionResult> Product_Detail(int idProduct)
         {
 
             Product oProduct = new Product();
@@ -35,7 +36,7 @@ namespace PruebaTecniaAB.Controllers
             if (idProduct != 0)
             {
 
-                oProduct = _dbVentasContext.Products.Find(idProduct);
+                oProduct = await _productRepository.GetProductById(idProduct);
 
             }
 
@@ -43,41 +44,43 @@ namespace PruebaTecniaAB.Controllers
         }
 
         [HttpPost]
-        public IActionResult Product_Detail(Product oProduct)
+        public async Task<IActionResult> Product_Detail(Product oProduct)
         {
-            if (oProduct.IdProduct == 0)
-            {
 
-                _dbVentasContext.Products.Add(oProduct);
+            if (ModelState.IsValid)
+            {
+                if (oProduct.IdProduct == 0)
+                {
+                    await _productRepository.AddProduct(oProduct);
+
+                }
+                else
+                {
+                    await _productRepository.UpdateProduct(oProduct);
+                }
+
+                return RedirectToAction("Index", "Product");
 
             }
-            else
-            {
+           
 
-                _dbVentasContext.Products.Update(oProduct);
-
-            }
-
-            _dbVentasContext.SaveChanges();
-
-            return RedirectToAction("Index", "Product");
+            return View(oProduct);
         }
 
         [HttpGet]
-        public IActionResult Delete(int idProduct)
+        public async Task<IActionResult> Delete(int idProduct)
         {
 
-            Product oProduct = _dbVentasContext.Products.Where(e => e.IdProduct == idProduct).FirstOrDefault();
+            Product oProduct = await _productRepository.GetProductToDelete(idProduct);
 
             return View(oProduct);
         }
 
         [HttpPost]
-        public IActionResult Delete(Product oProduct)
+        public async Task<IActionResult> Delete(Product oProduct)
         {
 
-            _dbVentasContext.Remove(oProduct);
-            _dbVentasContext.SaveChanges();
+            await _productRepository.DeleteProduct(oProduct);
 
             return RedirectToAction("Index", "Product");
         }

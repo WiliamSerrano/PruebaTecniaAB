@@ -10,52 +10,61 @@
 <div class="container-fluid col-lg-12 maincontainer">
 
     <div class="col-6 cont">
-        <h3>Products</h3>
-        <div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="tableProduct">
-                   
-                </tbody>
-            </table>
-        </div>
-    </div>
-  
-    <div class="row col-6 cont">
-        <h3>Sales list</h3>
-        <div class="contSales">
-            <div>
-                <table id="salelist" class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Quantity</th>
-                            <th>Total Price</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="saleBody">
-                    </tbody>
-                </table>
+        <div class="card">
+            <div class="card-header">
+                <h5>Productos</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableProduct">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
+    </div>
+    <div class="row col-6 cont">
+        <div class="card">
+            <div class="card-header">
+                <h5>Sale list</h5>
+            </div>
+            <div class="card-body contSales">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="saleBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <form>
             <div>
-                <div class="mb-3">
-                    <label class="form-label">Total cost</label>
-                    <input id="total" name="total" class="form-control" type="text" value="0" disabled readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Name Client</label>
-                    <input id="name" name="name" type="text" class="form-control">
+                <div class="col-12 frtDtos">
+                    <div>
+                        <label class="form-label">Total cost</label>
+                        <input id="total" name="total" class="form-control totalinfo" type="text" value="0" disabled readonly>
+                    </div>
+                    <div class="clientinfo">
+                        <label class="form-label">Name Client</label>
+                        <input id="name" name="name" type="text" class="form-control clientinfo">
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Description</label>

@@ -2,6 +2,17 @@
     margin: 0;
     padding: 0;
 }
+.card {
+    padding: 0;
+}
+
+form {
+    padding: 0 !important;
+}
+.card-header {
+    background-color: #1A6E73;
+    color: white;
+}
 
 .btnAdd {
     width: 30px;
@@ -41,13 +52,23 @@
 
 }
 
-.contSales {
+.frtDtos {
+    display: flex;
+}
 
+.totalinfo {
+    width: 80px;
+}
+
+.clientinfo {
+    width: 100%;
+}
+
+.contSales {
     height: 200px;
     max-width: 100%;
     overflow-y: auto;
     position: relative;
-
 }
 
 #salelist > thead {
@@ -67,6 +88,10 @@
     font-weight: bold;
 }
 
+.headcont {
+    background-color: #1A6E73;
+    color: white;
+}
 
    
 

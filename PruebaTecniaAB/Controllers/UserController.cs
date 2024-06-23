@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using PruebaTecniaAB.Data.Interfaces;
 using PruebaTecniaAB.Models;
 
 namespace PruebaTecniaAB.Controllers
@@ -9,74 +8,68 @@ namespace PruebaTecniaAB.Controllers
     public class UserController : Controller
     {
 
-        private readonly DBVENTASContext _dbVentasContext;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(DBVENTASContext context)
+        public UserController(IUserRepository userRepository)
         {
 
-            _dbVentasContext = context;
+            _userRepository = userRepository;
 
         }
 
         [Authorize(policy: "AdminOnly")]
-        public async Task<IActionResult> Index()
+        public async Task<ViewResult> Index()
         {
-            List<User> userlist = await _dbVentasContext.Users.ToListAsync();
-            return View(userlist);
+            var users = await _userRepository.GetUsers();
+            return View(users);
         }
 
         [HttpGet]
-        public IActionResult User_Detail(int idUser)
+        public async Task<IActionResult> User_Detail(int idUser)
+        {
+           
+            var user = await _userRepository.GetUserById(idUser);
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> User_Detail(User oUser)
         {
 
-            User oUser = new User();
-
-            if ( idUser != 0)
+            if (ModelState.IsValid)
             {
+                if (oUser.IdUser == 0)
+                {
 
-                oUser = _dbVentasContext.Users.Find(idUser);
+                    await _userRepository.Add(oUser);
+
+                }
+                else
+                {
+                    await _userRepository.UpdateUser(oUser);
+                }
+
+                return RedirectToAction("Index", "User");
 
             }
+            return View(oUser);
+            
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Eliminar(int idUser)
+        {
+
+            User oUser = await _userRepository.GetUserToDelete(idUser);
 
             return View(oUser);
         }
 
         [HttpPost]
-        public IActionResult User_Detail(User oUser)
-        {
-            if (oUser.IdUser == 0)
-            {
-
-                _dbVentasContext.Users.Add(oUser);
-
-            }
-            else
-            {
-
-                _dbVentasContext.Users.Update(oUser);
-
-            }
-
-            _dbVentasContext.SaveChanges();
-
-            return RedirectToAction("Index", "User");
-        }
-
-        [HttpGet]
-        public IActionResult Eliminar(int idUser)
+        public async Task<IActionResult> Eliminar(User oUser)
         {
 
-            User oUser = _dbVentasContext.Users.Where(e => e.IdUser == idUser).FirstOrDefault();
-
-            return View(oUser);
-        }
-
-        [HttpPost]
-        public IActionResult Eliminar(User oUser)
-        {
-
-            _dbVentasContext.Remove(oUser);
-            _dbVentasContext.SaveChanges();
+            await _userRepository.DeleteUser(oUser);
 
             return RedirectToAction("Index", "User");
         }

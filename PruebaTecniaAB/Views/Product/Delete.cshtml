@@ -4,10 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text text-danger">Delete Product</h1>
-
-<div class="row">
-    <div class="col col-sm-4">
+<div class="card">
+    <div class="card-header"><h1 class="text">Delete Product</h1></div>
+    <div class="card_body cardProduct">
         <form asp-action="Delete" asp-controller="Product" method="post">
 
             <input type="hidden" asp-for="IdProduct" />
@@ -43,4 +42,3 @@
         </form>
     </div>
 </div>
-

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PruebaTecniaAB.Data.Interfaces;
+using PruebaTecniaAB.Data.Repositories;
 using PruebaTecniaAB.Models;
 using PruebaTecniaAB.Models.ViewModels;
 
@@ -9,26 +11,25 @@ namespace PruebaTecniaAB.Controllers
     public class AccountController : Controller
     {
 
-        private readonly DBVENTASContext _dbVentasContext;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountController(DBVENTASContext context)
+        public AccountController(IAccountRepository accountRepository)
         {
 
-            _dbVentasContext = context;
+            _accountRepository = accountRepository;
 
         }
 
         [Authorize(policy: "AmdinAndAccountant")]
         public async Task<IActionResult> Index()
         {
-            var sales = await _dbVentasContext.Sales.ToListAsync();
-
+            var sales = await _accountRepository.GetSales();
             return View(sales);
         }
 
 
         [HttpGet]
-        public IActionResult UpdateSale(int idSale)
+        public async Task<IActionResult> UpdateSale(int idSale)
         {
 
             Sale oSale = new Sale();
@@ -36,21 +37,17 @@ namespace PruebaTecniaAB.Controllers
             if (idSale != 0)
             {
 
-                oSale = _dbVentasContext.Sales.Find(idSale);
+                oSale = await _accountRepository.GetSaleById(idSale);
             }
 
             return View(oSale);
         }
 
         [HttpPost]
-        public IActionResult UpdateSale(Sale oSale)
+        public async Task<IActionResult> UpdateSale(Sale oSale)
         {
 
-            oSale.PaidDate = DateTime.Now;
-            oSale.IsPaid = true;
-
-            _dbVentasContext.Sales.Update(oSale);
-            _dbVentasContext.SaveChanges();
+            await _accountRepository.UpdateSale(oSale);
 
             return RedirectToAction("Index", "Account");
         }
@@ -58,28 +55,9 @@ namespace PruebaTecniaAB.Controllers
         [HttpGet]
         public async Task<IActionResult> ShowDetailSale(int idSale)
         {
-
-            var sale = _dbVentasContext.Sales.Where(m => m.IdSale == idSale).FirstOrDefault();
-            var products = await _dbVentasContext.SalesProducts.Where(x => x.IdSale == sale.IdSale).Include(c => c.oProduct)
-            .GroupBy(x => x.IdProduct).Select(p => new Product
-                            {
-                                ProductName = p.Select(x => x.oProduct.ProductName).FirstOrDefault(),
-                                Quantity = _dbVentasContext.SalesProducts
-                                .Where(x => x.IdProduct == p.Select(x => x.oProduct.IdProduct).FirstOrDefault() && x.IdSale == sale.IdSale).Count(),
-                                UnitPrice = p.Select(x => x.oProduct.UnitPrice).FirstOrDefault(),
-
-                            }).ToListAsync();
-
-            SaleDetailVM vm = new SaleDetailVM() { 
+            var details = await _accountRepository.ShowSaleDetail(idSale);
+            return View(details); 
             
-                oSale = sale,
-                oProducts = products
-            
-            };
-            
-
-
-            return View(vm);
 
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PruebaTecniaAB.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace PruebaTecniaAB.Controllers
 {
@@ -19,6 +20,7 @@ namespace PruebaTecniaAB.Controllers
         [Authorize(policy: "AllRoles")]
         public IActionResult Index()
         {
+
             return View();
         }
 

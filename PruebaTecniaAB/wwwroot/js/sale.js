@@ -2,7 +2,6 @@ let sales = [];
 let products = [];
 let totalPriceSale = 0;
 
-
 function SetData() {
 
     const nameForm = document.getElementById('name').value;
@@ -10,52 +9,60 @@ function SetData() {
     const mailForm = document.getElementById('mail').value;
     const totalForm = parseFloat(document.getElementById('total').value);
 
-    let listidProds = [];
+    if (nameForm !== "" && descriptionForm !== "" && mailForm !== "" && totalForm !== "") {
 
-    sales.forEach(sale => {
+        let listidProds = [];
 
-        for (let i = 0; i < sale.quantity; i++) {
+        sales.forEach(sale => {
 
-            const prdId = {
+            for (let i = 0; i < sale.quantity; i++) {
 
-                idProduct: sale.idProduct
+                const prdId = {
+
+                    idProduct: sale.idProduct
+
+                }
+
+                listidProds.push(prdId);
 
             }
 
-            listidProds.push(prdId);
 
-        }
-
-
-    })
-
-    console.log(listidProds);
-
-    const data = {
-        nameClient: nameForm,
-        description: descriptionForm,
-        mail: mailForm,
-        totalPrice: totalForm,
-        salesProducts: listidProds 
-
-    };
-
-    fetch('/Sale/createSale', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Sale successfully created!');
         })
-        .catch((error) => {
-           console.error('Error:', error);
-            alert('There was an error creating the product.');
-        });
+
+        console.log(listidProds);
+
+        const data = {
+            nameClient: nameForm,
+            description: descriptionForm,
+            mail: mailForm,
+            totalPrice: totalForm,
+            salesProducts: listidProds
+
+        };
+
+        fetch('/Sale/createSale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('There was an error creating the product.');
+            });
+
+    } else {
+
+        location.reload();
+
+    }
 
 }
 function RestQuantity(idProduct) {
@@ -64,7 +71,9 @@ function RestQuantity(idProduct) {
 
         if (item.idProduct == idProduct) {
 
-            products[index].quantity -= 1;
+            if (products[index].quantity > 0) {
+                products[index].quantity -= 1;
+            }
 
         }
 
@@ -73,7 +82,6 @@ function RestQuantity(idProduct) {
     CreateTable(products)
 
 }
-
 function RestQuantitySale(idProduct) {
 
     products.forEach((item, index) => {
@@ -90,12 +98,11 @@ function RestQuantitySale(idProduct) {
     LessProduct(idProduct)
 
 }
-
 function LessProduct(idProduct) {
 
     const productExistence = sales.find(sale => sale.idProduct === idProduct);
 
-    if (productExistence) {
+    if (productExistence ) {
 
         productExistence.quantity -= 1;
         productExistence.totalPrice = productExistence.quantity * productExistence.unitPrice;
@@ -108,49 +115,56 @@ function LessProduct(idProduct) {
 }
 function AddProduct(idProduct, productName, unitPrice) {
 
+    const product = products.find(p => p.idProduct === idProduct);
 
-    const productExistence = sales.find(sale => sale.idProduct === idProduct);
+    if (product) {
 
-    if (productExistence) {
-       
-        productExistence.quantity += 1;
-        productExistence.totalPrice = productExistence.quantity * unitPrice;
-        totalPriceSale = productExistence.totalPrice;
+        if (product.quantity > 0) {
 
-    } else {
-        
-        const newSale = {
-            idProduct,
-            productName,
-            quantity: 1,
-            unitPrice,
-            totalPrice: unitPrice 
-        };
-        sales.push(newSale);
+            const productExistence = sales.find(sale => sale.idProduct === idProduct);
+
+            if (productExistence) {
+
+                productExistence.quantity += 1;
+                productExistence.totalPrice = productExistence.quantity * unitPrice;
+                totalPriceSale = productExistence.totalPrice;
+
+            } else {
+
+                const newSale = {
+                    idProduct,
+                    productName,
+                    quantity: 1,
+                    unitPrice,
+                    totalPrice: unitPrice
+                };
+                sales.push(newSale);
+            }
+
+        }
+
     }
-
 
     updateTableSales();
 
 }
-
 function CreateTable(data) {
 
     const tbody = document.querySelector('#tableProduct');
     tbody.innerHTML = ''; // Limpiar filas existentes
 
     data.forEach(dato => {
-        const row = `<tr>
+            const row = `<tr>
                                             <td>${dato.productName}</td>
                                             <td>${dato.quantity}</td>
                                             <td>${dato.unitPrice} $</td>
                                             <td>
-                                            <button type="button" class="btnAdd" onclick="AddProduct(${dato.idProduct},'${dato.productName}','${dato.unitPrice}'); RestQuantity(${dato.idProduct}) " >+</button>
+                                            <button type="button" class="btnAdd" onclick="AddProduct(${dato.idProduct},'${dato.productName}','${dato.unitPrice}'); RestQuantity(${dato.idProduct}) " ><i class="bi bi-plus-circle"></i></button>
                                             </td>
                                          </tr>`;
-        tbody.innerHTML += row;
+            tbody.innerHTML += row; 
     });
-
+    
 }
 function updateTableSales() {
 
@@ -166,7 +180,7 @@ function updateTableSales() {
                     <td>${sale.productName}</td>
                     <td>${sale.quantity}</td>
                     <td>${sale.totalPrice} $</td>
-                    <td><button type="button" class="btnLess" onclick="RestQuantitySale(${sale.idProduct})" >-</button></td>
+                    <td><button type="button" class="btnLess" onclick="RestQuantitySale(${sale.idProduct})" ><i class="bi bi-dash-circle"></i></button></td>
                    </tr>`;
             salesBody.innerHTML += row;
 
@@ -193,21 +207,23 @@ function Load_Data() {
         })
         .then(data => {
 
-            CreateTable(data);
-
             data.forEach(item => {
 
-                let product = {
-                    idProduct: item.idProduct,
-                    productName: item.productName,
-                    quantity: item.quantity,
-                    unitPrice: item.unitPrice
-                };
+                if (item.active != false) {
 
-                products.push(product);
+                    let product = {
+                        idProduct: item.idProduct,
+                        productName: item.productName,
+                        quantity: item.quantity,
+                        unitPrice: item.unitPrice
+                    };
 
-            })
+                    products.push(product);
+                }
 
+            });
+           
+            CreateTable(products);
         })
 
         .catch(error => {
