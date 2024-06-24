@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PruebaTecniaAB.Data.Interfaces;
 using PruebaTecniaAB.Models;
@@ -70,11 +71,36 @@ namespace PruebaTecniaAB.Data.Repositories
             return oProduct;
         }
 
+        public async Task<bool> CanDeleteProduct(int idProduct)
+        {
+
+            bool hasDependencies = await _dbVentasContext.SalesProducts.AnyAsync(o => o.IdProduct == idProduct);
+
+            return !hasDependencies;
+        }
+
+        [ValidateAntiForgeryToken]
         public async Task<Product> DeleteProduct(Product product)
         {
-            _dbVentasContext.Remove(product);
-            await _dbVentasContext.SaveChangesAsync();
 
+            Product productExistence = await _dbVentasContext.Products.FirstOrDefaultAsync(p => p.IdProduct == product.IdProduct);
+
+            if (productExistence != null)
+            {
+                bool canDelete = await CanDeleteProduct(product.IdProduct);
+
+                if (canDelete)
+                {
+                    _dbVentasContext.Remove(productExistence);
+                    await _dbVentasContext.SaveChangesAsync();
+                }
+                else {
+
+                    throw new InvalidOperationException("The product cannot be deleted due to dependencies on other entities");
+                }
+
+            }
+           
             return product;
         }
 

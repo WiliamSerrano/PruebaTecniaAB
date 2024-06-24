@@ -1,4 +1,4 @@
-﻿@* @model PruebaTecniaAB.Models.Sale; *@
+﻿@model PruebaTecniaAB.Models.Sale;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -63,16 +63,16 @@
                     </div>
                     <div class="clientinfo">
                         <label class="form-label">Name Client</label>
-                        <input id="name" name="name" type="text" class="form-control clientinfo">
+                        <input id="name" name="name" type="text" class="form-control clientinfo" required>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Description</label>
-                    <input id="description" name="description"  type="text" class="form-control">
+                    <input id="description" name="description" type="text" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mail</label>
-                    <input id="mail" name="mail"  type="mail" class="form-control">
+                    <input id="mail" name="mail" type="mail" class="form-control" required>
                 </div>
                 <div>
                     <button class="btn btn-success btn-sm" id="btnSel" onclick="SetData()" type="button">Sell</button>
@@ -81,6 +81,51 @@
         </form>
     </div>
 </div>
-
+<div class="modal fade" id="errorModalEmail" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+            </div>
+            <div class="modal-body">
+                Please enter a valid email
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalEmail()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+            </div>
+            <div class="modal-body">
+                Fields cannot be empty
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeErrorModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="errorModalProd" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+            </div>
+            <div class="modal-body">
+                Products cannot be left empty
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeProductsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="~/js/sale.js" asp-append-version="true"></script>
+
 

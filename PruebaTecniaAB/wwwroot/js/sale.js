@@ -1,6 +1,22 @@
 let sales = [];
 let products = [];
 let totalPriceSale = 0;
+function closeErrorModal() {
+    $('#errorModal').modal('hide');
+}
+
+function closeModalEmail() {
+    $('#errorModalEmail').modal('hide');
+}
+
+function closeProductsModal() {
+    $('#errorModalProd').modal('hide');
+}
+
+function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(String(email).toLowerCase());
+}
 
 function SetData() {
 
@@ -11,56 +27,69 @@ function SetData() {
 
     if (nameForm !== "" && descriptionForm !== "" && mailForm !== "" && totalForm !== "") {
 
-        let listidProds = [];
+        if (validateEmail(mailForm)) {
 
-        sales.forEach(sale => {
+            let listidProds = [];
 
-            for (let i = 0; i < sale.quantity; i++) {
+            sales.forEach(sale => {
 
-                const prdId = {
+                for (let i = 0; i < sale.quantity; i++) {
 
-                    idProduct: sale.idProduct
+                    const prdId = {
+
+                        idProduct: sale.idProduct
+
+                    }
+
+                    listidProds.push(prdId);
 
                 }
 
-                listidProds.push(prdId);
 
+            })
+
+            if (listidProds.length === 0) {
+                $('#errorModalProd').modal('show');
+            }
+            else {
+                console.log(listidProds);
+
+                const data = {
+                    nameClient: nameForm,
+                    description: descriptionForm,
+                    mail: mailForm,
+                    totalPrice: totalForm,
+                    salesProducts: listidProds
+
+                };
+
+                fetch('/Sale/createSale', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert('There was an error creating the product.');
+                    });
             }
 
+            
+        }
+        else {
+            $('#errorModalEmail').modal('show');
+        }
+        
+    }else {
 
-        })
-
-        console.log(listidProds);
-
-        const data = {
-            nameClient: nameForm,
-            description: descriptionForm,
-            mail: mailForm,
-            totalPrice: totalForm,
-            salesProducts: listidProds
-
-        };
-
-        fetch('/Sale/createSale', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                location.reload();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('There was an error creating the product.');
-            });
-
-    } else {
-
-        location.reload();
+        $('#errorModal').modal('show');
 
     }
 
@@ -154,10 +183,11 @@ function CreateTable(data) {
     tbody.innerHTML = ''; // Limpiar filas existentes
 
     data.forEach(dato => {
+            const unitPriceFormatted = parseFloat(dato.unitPrice).toFixed(2);
             const row = `<tr>
                                             <td>${dato.productName}</td>
                                             <td>${dato.quantity}</td>
-                                            <td>${dato.unitPrice} $</td>
+                                            <td>${unitPriceFormatted} $</td>
                                             <td>
                                             <button type="button" class="btnAdd" onclick="AddProduct(${dato.idProduct},'${dato.productName}','${dato.unitPrice}'); RestQuantity(${dato.idProduct}) " ><i class="bi bi-plus-circle"></i></button>
                                             </td>
@@ -175,11 +205,13 @@ function updateTableSales() {
 
         if (sale.quantity > 0) {
 
+            let totalPrice = parseFloat(sale.unitPrice).toFixed(2);
+
             const row = `
                     <tr>
                     <td>${sale.productName}</td>
                     <td>${sale.quantity}</td>
-                    <td>${sale.totalPrice} $</td>
+                    <td>${totalPrice} $</td>
                     <td><button type="button" class="btnLess" onclick="RestQuantitySale(${sale.idProduct})" ><i class="bi bi-dash-circle"></i></button></td>
                    </tr>`;
             salesBody.innerHTML += row;
@@ -189,8 +221,8 @@ function updateTableSales() {
     });
 
     let allProducts = sales.flat();
-    let totalPriceSale = allProducts.reduce((total, product) => total + parseFloat(product.totalPrice), 0);
-    document.getElementById('total').value = totalPriceSale;
+    let totalPriceSale = allProducts.reduce((total, product) => total + parseFloat(product.totalPrice || 0), 0);
+    document.getElementById('total').value = totalPriceSale.toFixed(2);
 }
 function Load_Data() {
         fetch('/Sale/Products_Data', {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PruebaTecniaAB.Data.Interfaces;
 using PruebaTecniaAB.Data.Repositories;
 using PruebaTecniaAB.Models;
+using System.Diagnostics;
 
 namespace PruebaTecniaAB.Controllers
 {
@@ -79,10 +80,21 @@ namespace PruebaTecniaAB.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Product oProduct)
         {
+            try
+            {
+                await _productRepository.DeleteProduct(oProduct);
 
-            await _productRepository.DeleteProduct(oProduct);
+                return RedirectToAction("Index", "Product");
+            }
+            catch (Exception ex)
+            {
 
-            return RedirectToAction("Index", "Product");
+                ViewBag.ErrorMessage = $"Error deleting product: {ex.Message}";
+
+                var product = await _productRepository.GetProductToDelete(oProduct.IdProduct);
+                return View(product);
+            }
+           
         }
     }
 }
